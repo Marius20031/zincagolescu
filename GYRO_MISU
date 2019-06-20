@@ -1,0 +1,380 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+
+/**
+ * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
+ * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
+ * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
+ * It includes all the skeletal structure that all linear OpModes contain.
+ *
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ */
+
+@Autonomous(name="MGyro", group="Linear Opmode")
+//@Disabled
+public class gyro extends LinearOpMode {
+
+    // Declare OpMode members.
+    private ElapsedTime runtime = new ElapsedTime();
+
+    DcMotor leftMotor;
+    DcMotor rightMotor;
+    DcMotor motorRoaba;
+    DcMotor motorElice;
+    DcMotor motorCuva;
+    DcMotor motorLeafting;
+
+    Servo servo;
+
+    double power = 1.0;
+    double power1 = 0.9;
+    double power0 = 0.0;
+    double power2 = -1.0;
+    double powerRoaba = 0.5;
+    double powerElice = 0.5;
+    double powerCuva = 0.6;
+    double powerOpusRoaba = 1.0;
+    double powerLeafting = 1.0;
+
+    double servoPosition = 0.0;
+    double servoPosition1 = 0.5;
+    double servoPosition2 = 1.0;
+
+    long time1 = 5000;
+    long time2 = 740;
+    long timeCuva1 = 500;
+    long timeCuva2 = 200;
+    long timeInapoi = 3000;
+    long timeUpLifting = 10000;
+    long timeDownLifting = 5000;
+
+    public int  ok = 1;
+    public int ok1 = 1;
+    public int m = 1;
+    public int n = 1;
+
+    @Override
+
+    public void runOpMode() {
+        waitForStart();
+        while (opModeIsActive() && !isStopRequested() && ok != 0) {
+            while (ok != 0) {
+                if (ok1 != 0) {
+                    //intind roaba jos
+                    goIntindeRoaba(powerRoaba);
+                    sleep(100);
+                    gosStop();
+                    sleep(2000);
+                }
+                while (time1 >= 0) {
+                    if(m != 0) {
+                        for (int i = 0; i < 3; i++) {
+                            //prima tura
+                            //invar elicele
+                            goInvarateElicele(powerElice);
+                            //merg inainte
+                            goStraight(power, power1);
+                            sleep(time1);
+                            gosStop();
+                            sleep(100);
+                            //presc elicele
+                            goStopElice();
+                            sleep(100);
+                            //fac viraj
+                            goLeft();
+                            sleep(time2);
+                            gosStop();
+                            sleep(100);
+                        }
+                    }
+                    if (n != 0) {
+                        // ridic roaba
+                        goIntindeRoaba(-powerOpusRoaba);
+                        sleep(1000);
+                        //inavart elicele reverse
+                        goInvarateElicele(powerElice);
+                        sleep(100);
+                        //las roaba jos
+                        goIntindeRoaba(powerRoaba);
+                        sleep(100);
+                        //ridic cuva
+                        goInvarteCuva(powerCuva, timeCuva1);
+                        sleep(100);
+                        //invart servourile forward
+                        goInvarteServo();
+                        sleep(100);
+                        //invart servourile reverse
+                        goInvarteOpusServo();
+                        sleep(100);
+                        //las cuva jos
+                        goInvarteCuva(-powerCuva, timeCuva2);
+                        sleep(100);
+
+                        time1 = time1 - 1000;
+                    }
+
+                    m = 0;
+                    n = 0;
+
+                    for(int i = 0; i < 4; i++) {
+                        //restul turelor
+                        //invar elicele
+                        goInvarateElicele(powerElice);
+                        //merg inainte
+                        goStraight(power, power1);
+                        sleep(time1);
+                        gosStop();
+                        sleep(100);
+                        //presc elicele
+                        goStopElice();
+                        sleep(100);
+                        //fac viraj
+                        goLeft();
+                        sleep(time2);
+                        gosStop();
+                        sleep(100);
+                    }
+                    // ridic roaba
+                    goIntindeRoaba(-powerOpusRoaba);
+                    sleep(1000);
+                    //inavart elicele reverse
+                    goInvarateElicele(powerElice);
+                    sleep(100);
+                    //las roaba jos
+                    goIntindeRoaba(powerRoaba);
+                    sleep(100);
+                    //ridic cuva
+                    goInvarteCuva(powerCuva, timeCuva1);
+                    sleep(100);
+                    //invart servourile forward
+                    goInvarteServo();
+                    sleep(100);
+                    //invart servourile reverse
+                    goInvarteOpusServo();
+                    sleep(100);
+                    //las cuva jos
+                    goInvarteCuva(-powerCuva, timeCuva2);
+                    sleep(100);
+
+                    time1 = time1 - 1000;
+                }
+                // las gunoiul pe banca
+                ok1 = 0;
+
+                goStopElice();
+                sleep(100);
+                //urc roaba
+                goIntindeRoaba(-powerOpusRoaba);
+                sleep(1000);
+                //urc heavylifting - ul
+                goUpLeafting(powerLeafting);
+                sleep(100);
+                //dau inapoi
+                goStraight(-power, -power1);
+                sleep(timeInapoi);
+                gosStop();
+                sleep(100);
+                //las jos heavylifting - ul
+                goDownLeafting(powerLeafting);
+                sleep(timeDownLifting);
+                //merg inainte si papa
+                goStraight(power, power1);
+                sleep(1000);
+                gosStop();
+                ok = 0;
+            }
+
+        }
+
+    }
+
+    public void goStraight(double power, double power1) {
+        leftMotor = hardwareMap.dcMotor.get("Motor-sasiu-STANGA");
+        rightMotor = hardwareMap.dcMotor.get("Motor-sasiu-DREAPTA");
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        waitForStart();
+        runtime.reset();
+
+        leftMotor.setPower(power1);
+        rightMotor.setPower(power);
+
+
+
+    }
+
+    public void goLeft() {
+        leftMotor = hardwareMap.dcMotor.get("Motor-sasiu-STANGA");
+        rightMotor = hardwareMap.dcMotor.get("Motor-sasiu-DREAPTA");
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        waitForStart();
+        runtime.reset();
+
+        leftMotor.setPower(power2);
+        rightMotor.setPower(power1);
+
+    }
+
+    public void gosStop() {
+        leftMotor = hardwareMap.dcMotor.get("Motor-sasiu-STANGA");
+        rightMotor = hardwareMap.dcMotor.get("Motor-sasiu-DREAPTA");
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        waitForStart();
+        runtime.reset();
+
+        leftMotor.setPower(power0);
+        rightMotor.setPower(power0);
+
+    }
+
+    public void goIntindeRoaba(double power) {
+        motorRoaba = hardwareMap.dcMotor.get("MotorRIDICARECuva");
+        motorRoaba.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        waitForStart();
+        runtime.reset();
+
+        motorRoaba.setPower(power);
+
+        sleep(700);
+
+        motorRoaba.setPower(power0);
+    }
+
+    public void goInvarateElicele(double power) {
+        motorElice = hardwareMap.dcMotor.get("MotorELICE");
+        motorElice.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        waitForStart();
+        runtime.reset();
+
+        motorElice.setPower(power);
+    }
+
+    public void goStopElice() {
+        motorElice = hardwareMap.dcMotor.get("MotorELICE");
+        motorElice.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        waitForStart();
+        runtime.reset();
+
+        motorElice.setPower(power0);
+    }
+
+    public void goInvarteCuva(double power, long timeCuva) {
+        motorCuva = hardwareMap.dcMotor.get("MotorRidicareVERTICALA");
+        motorCuva.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        waitForStart();
+        runtime.reset();
+
+        motorCuva.setPower(power);
+
+        sleep(timeCuva);
+
+        motorCuva.setPower(power0);
+    }
+
+    public void goInvarteServo() {
+        servo = hardwareMap.servo.get("Servo-stanga-rotitcuva");
+        servo.setPosition(servoPosition1);
+
+        waitForStart();
+        runtime.reset();
+
+        servo.setPosition(servoPosition);
+
+        sleep(2000);
+    }
+
+    public void goInvarteOpusServo() {
+        servo = hardwareMap.servo.get("Servo-stanga-rotitcuva");
+        servo.setPosition(servoPosition);
+
+        waitForStart();
+        runtime.reset();
+
+        servo.setPosition(servoPosition2);
+
+        sleep(2000);
+    }
+
+    public void goUpLeafting(double power) {
+        motorLeafting = hardwareMap.dcMotor.get("MotorLIFTING");
+        motorLeafting.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        waitForStart();
+        runtime.reset();
+
+        motorLeafting.setPower(power);
+
+        sleep(timeUpLifting);
+
+        motorLeafting.setPower(power0);
+    }
+
+    public void goDownLeafting(double power) {
+        motorLeafting = hardwareMap.dcMotor.get("MotorLIFTING");
+        motorLeafting.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        waitForStart();
+        runtime.reset();
+
+        motorLeafting.setPower(power);
+
+        sleep(timeDownLifting);
+
+        motorLeafting.setPower(power0);
+    }
+}
