@@ -80,10 +80,56 @@ public class Mecanum_Mate extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+        while(gamepad1.dpad_up){
+                TleftDrive.setPower(1);
+                BleftDrive.setPower(1);
+                TrightDrive.setPower(1);
+                BrightDrive.setPower(1);
+                
+                if (!gamepad1.dpad_up){
+                    TleftDrive.setPower(0);
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    break;
+                    }
+                }
+            }
+        while(gamepad1.dpad_down){
+            TleftDrive.setPower(-1);
+            BleftDrive.setPower(-1);
+            TrightDrive.setPower(-1);
+            BrightDrive.setPower(-1);
 
-            
+            if (!gamepad1.dpad_down){
+                TleftDrive.setPower(0);
+                BleftDrive.setPower(0);
+                TrightDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
+        }
 
+        while(gamepad1.dpad_right){
+            TleftDrive.setPower(1);
+            BleftDrive.setPower(-1);
+            TrightDrive.setPower(-1);
+            BrightDrive.setPower(1);
 
+            if (!gamepad1.dpad_right){
+                TleftDrive.setPower(0);
+                BleftDrive.setPower(0);
+                TrightDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
+        }
+        
+        while(gamepad1.dpad_up && gamepad1.dpad_right) {
+        
+        
+        
+        }
             telemetry.update();
         }
     }
