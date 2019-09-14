@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -74,18 +75,22 @@ public class Mecanum_Mate extends LinearOpMode {
         BleftDrive  = hardwareMap.get(DcMotor.class, "Bleft_drive");
         BrightDrive = hardwareMap.get(DcMotor.class, "Bright_drive");
 
+        TleftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        BleftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-        while(gamepad1.dpad_up){
+
+            while(gamepad1.dpad_up){
                 TleftDrive.setPower(1);
                 BleftDrive.setPower(1);
                 TrightDrive.setPower(1);
                 BrightDrive.setPower(1);
-                
+
                 if (!gamepad1.dpad_up){
                     TleftDrive.setPower(0);
                     BleftDrive.setPower(0);
@@ -124,13 +129,88 @@ public class Mecanum_Mate extends LinearOpMode {
                 break;
             }
         }
-        
+
+        while (gamepad1.dpad_left){
+            TleftDrive.setPower(-1);
+            BleftDrive.setPower(1);
+            TrightDrive.setPower(1);
+            BrightDrive.setPower(-1);
+            if (!gamepad1.dpad_left){
+                TleftDrive.setPower(0);
+                BleftDrive.setPower(0);
+                TrightDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
+        }
+
         while(gamepad1.dpad_up && gamepad1.dpad_right) {
-        
-        
-        
+            TleftDrive.setPower(1);
+            BrightDrive.setPower(1);
+            if(!(gamepad1.dpad_up && gamepad1.dpad_right)){
+                TleftDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
         }
-            telemetry.update();
+        while ( gamepad1.dpad_down && gamepad1.dpad_left){
+            BleftDrive.setPower(1);
+            TrightDrive.setPower(1);
+            if(!(gamepad1.dpad_down && gamepad1.dpad_left)){
+                BleftDrive.setPower(0);
+                TrightDrive.setPower(0);
+                break;
+            }
         }
+        while(gamepad1.dpad_up && gamepad1.dpad_left){
+            TleftDrive.setPower(1);
+            BrightDrive.setPower(1);
+            if(!(gamepad1.dpad_up && gamepad1.dpad_left)){
+                TleftDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
+        }
+        while(gamepad1.dpad_down && gamepad1.dpad_right){
+            TleftDrive.setPower(-1);
+            BrightDrive.setPower(-1);
+            if(!(gamepad1.dpad_down && gamepad1.dpad_right)){
+                TleftDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
+        }
+        while(gamepad1.right_bumper){
+            TleftDrive.setPower(1);
+            BleftDrive.setPower(1);
+            TrightDrive.setPower(-1);
+            BrightDrive.setPower(-1);
+            if (!gamepad1.right_bumper){
+                TleftDrive.setPower(0);
+                BleftDrive.setPower(0);
+                TrightDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
+        }
+        while(gamepad1.left_bumper){
+            TleftDrive.setPower(-1);
+            BleftDrive.setPower(-1);
+            TrightDrive.setPower(1);
+            BrightDrive.setPower(1);
+            if (!gamepad1.left_bumper){
+                TleftDrive.setPower(0);
+                BleftDrive.setPower(0);
+                TrightDrive.setPower(0);
+                BrightDrive.setPower(0);
+                break;
+            }
+        }
+
+
+
+
+
     }
 }
+
