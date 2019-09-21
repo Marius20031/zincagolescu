@@ -55,12 +55,19 @@ import com.qualcomm.robotcore.util.Range;
 
 public class Mecanum_Mate extends LinearOpMode {
 
+
+
+    static final double INCREMENT   = 0.01;     // amount to ramp motor each CYCLE_MS cycle
+    static final int    CYCLE_MS    =   50;     // period of each cycle
+    static final double MAX_FWD     =  1.0;     // Maximum FWD power applied to motor
+    static final double MAX_REV     = -1.0;     // Maximum REV power applied to motor
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor TleftDrive = null;
     private DcMotor BleftDrive = null;
     private DcMotor TrightDrive = null;
     private DcMotor BrightDrive = null;
+    double  power   = 1;
 
     @Override
     public void runOpMode() {
@@ -90,127 +97,153 @@ public class Mecanum_Mate extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            while(gamepad1.dpad_up){
+            while (gamepad1.dpad_up) {
+                TleftDrive.setPower(-power);
+                BleftDrive.setPower(-power);
+                TrightDrive.setPower(-power);
+                BrightDrive.setPower(-power);
+                if (gamepad1.left_trigger!=0)
+                    power = 0.5;
+                if (gamepad1.left_trigger==0)
+                    power=1;
+                if (!gamepad1.dpad_up) {
+                    TleftDrive.setPower(0);
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    power=1;
+                    break;
+                }
+            }
+
+
+            while (gamepad1.dpad_down) {
+                TleftDrive.setPower(power);
+                BleftDrive.setPower(power);
+                TrightDrive.setPower(power);
+                BrightDrive.setPower(power);
+                if (gamepad1.left_trigger!=0)
+                    power = 0.5;
+                if (gamepad1.left_trigger==0)
+                    power=1;
+                if (!gamepad1.dpad_down) {
+                    TleftDrive.setPower(0);
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    power=1;
+                    break;
+                }
+            }
+
+            while (gamepad1.dpad_right) {
+                TleftDrive.setPower(power);
+                BleftDrive.setPower(-power);
+                TrightDrive.setPower(-power);
+                BrightDrive.setPower(power);
+                if (gamepad1.left_trigger!=0)
+                    power = 0.5;
+                if (gamepad1.left_trigger==0)
+                    power=1;
+                if (!gamepad1.dpad_right) {
+                    TleftDrive.setPower(0);
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    power=1;
+                    break;
+                }
+            }
+
+            while (gamepad1.dpad_left) {
+                TleftDrive.setPower(-power);
+                BleftDrive.setPower(power);
+                TrightDrive.setPower(power);
+                BrightDrive.setPower(-power);
+                if (gamepad1.left_trigger!=0)
+                    power = 0.5;
+                if (gamepad1.left_trigger==0)
+                    power=1;
+                if (!gamepad1.dpad_left) {
+                    TleftDrive.setPower(0);
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    power=1;
+                    break;
+                }
+            }
+
+            while (gamepad1.y) {
                 TleftDrive.setPower(1);
+                BrightDrive.setPower(1);
+                if (!(gamepad1.y)) {
+                    TleftDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    break;
+                }
+            }
+            while (gamepad1.a) {
                 BleftDrive.setPower(1);
                 TrightDrive.setPower(1);
-                BrightDrive.setPower(1);
-
-                if (!gamepad1.dpad_up){
+                if (!(gamepad1.a)) {
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    break;
+                }
+            }
+            while (gamepad1.x) {
+                TleftDrive.setPower(-1);
+                BrightDrive.setPower(-1);
+                if (!(gamepad1.x)) {
+                    TleftDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    break;
+                }
+            }
+            while (gamepad1.b) {
+                BleftDrive.setPower(-1);
+                TrightDrive.setPower(-1);
+                if (!(gamepad1.b)) {
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    break;
+                }
+            }
+            while (gamepad1.right_bumper) {
+                TleftDrive.setPower(1);
+                BleftDrive.setPower(1);
+                TrightDrive.setPower(-1);
+                BrightDrive.setPower(-1);
+                if (!gamepad1.right_bumper) {
                     TleftDrive.setPower(0);
                     BleftDrive.setPower(0);
                     TrightDrive.setPower(0);
                     BrightDrive.setPower(0);
                     break;
-                    }
                 }
             }
-        while(gamepad1.dpad_down){
-            TleftDrive.setPower(-1);
-            BleftDrive.setPower(-1);
-            TrightDrive.setPower(-1);
-            BrightDrive.setPower(-1);
-
-            if (!gamepad1.dpad_down){
-                TleftDrive.setPower(0);
-                BleftDrive.setPower(0);
-                TrightDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
+            while (gamepad1.left_bumper) {
+                TleftDrive.setPower(-1);
+                BleftDrive.setPower(-1);
+                TrightDrive.setPower(1);
+                BrightDrive.setPower(1);
+                if (!gamepad1.left_bumper) {
+                    TleftDrive.setPower(0);
+                    BleftDrive.setPower(0);
+                    TrightDrive.setPower(0);
+                    BrightDrive.setPower(0);
+                    break;
+                }
             }
-        }
 
-        while(gamepad1.dpad_right){
-            TleftDrive.setPower(1);
-            BleftDrive.setPower(-1);
-            TrightDrive.setPower(-1);
-            BrightDrive.setPower(1);
 
-            if (!gamepad1.dpad_right){
-                TleftDrive.setPower(0);
-                BleftDrive.setPower(0);
-                TrightDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
             }
+
         }
 
-        while (gamepad1.dpad_left){
-            TleftDrive.setPower(-1);
-            BleftDrive.setPower(1);
-            TrightDrive.setPower(1);
-            BrightDrive.setPower(-1);
-            if (!gamepad1.dpad_left){
-                TleftDrive.setPower(0);
-                BleftDrive.setPower(0);
-                TrightDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
-            }
-        }
-
-        while(gamepad1.dpad_up && gamepad1.dpad_right) {
-            TleftDrive.setPower(1);
-            BrightDrive.setPower(1);
-            if(!(gamepad1.dpad_up && gamepad1.dpad_right)){
-                TleftDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
-            }
-        }
-        while ( gamepad1.dpad_down && gamepad1.dpad_left){
-            BleftDrive.setPower(1);
-            TrightDrive.setPower(1);
-            if(!(gamepad1.dpad_down && gamepad1.dpad_left)){
-                BleftDrive.setPower(0);
-                TrightDrive.setPower(0);
-                break;
-            }
-        }
-        while(gamepad1.dpad_up && gamepad1.dpad_left){
-            TleftDrive.setPower(1);
-            BrightDrive.setPower(1);
-            if(!(gamepad1.dpad_up && gamepad1.dpad_left)){
-                TleftDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
-            }
-        }
-        while(gamepad1.dpad_down && gamepad1.dpad_right){
-            TleftDrive.setPower(-1);
-            BrightDrive.setPower(-1);
-            if(!(gamepad1.dpad_down && gamepad1.dpad_right)){
-                TleftDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
-            }
-        }
-        while(gamepad1.right_bumper){
-            TleftDrive.setPower(1);
-            BleftDrive.setPower(1);
-            TrightDrive.setPower(-1);
-            BrightDrive.setPower(-1);
-            if (!gamepad1.right_bumper){
-                TleftDrive.setPower(0);
-                BleftDrive.setPower(0);
-                TrightDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
-            }
-        }
-        while(gamepad1.left_bumper){
-            TleftDrive.setPower(-1);
-            BleftDrive.setPower(-1);
-            TrightDrive.setPower(1);
-            BrightDrive.setPower(1);
-            if (!gamepad1.left_bumper){
-                TleftDrive.setPower(0);
-                BleftDrive.setPower(0);
-                TrightDrive.setPower(0);
-                BrightDrive.setPower(0);
-                break;
-            }
-        }
     }
-}
+
+
+
 
