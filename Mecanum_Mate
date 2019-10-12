@@ -29,13 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -56,17 +55,14 @@ import com.qualcomm.robotcore.util.Range;
 public class Mecanum_Mate extends LinearOpMode {
 
 
-
-    static final double INCREMENT   = 0.01;     // amount to ramp motor each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_FWD     =  1.0;     // Maximum FWD power applied to motor
-    static final double MAX_REV     = -1.0;     // Maximum REV power applied to motor
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor TleftDrive = null;
     private DcMotor BleftDrive = null;
     private DcMotor TrightDrive = null;
     private DcMotor BrightDrive = null;
+    private Servo ServoRight = null;
+    private  Servo ServoLeft = null;
     double  power   = 1;
 
     @Override
@@ -81,6 +77,8 @@ public class Mecanum_Mate extends LinearOpMode {
         TrightDrive = hardwareMap.get(DcMotor.class, "Tright_drive");
         BleftDrive  = hardwareMap.get(DcMotor.class, "Bleft_drive");
         BrightDrive = hardwareMap.get(DcMotor.class, "Bright_drive");
+        ServoLeft = hardwareMap.get (Servo.class, "Servo1");
+        ServoRight = hardwareMap.get (Servo.class, "Servo2");
 
         TleftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         TrightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -89,6 +87,7 @@ public class Mecanum_Mate extends LinearOpMode {
 
         TleftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         BleftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -136,7 +135,7 @@ public class Mecanum_Mate extends LinearOpMode {
                 }
             }
 
-            while (gamepad1.dpad_right) {
+            while (gamepad1.dpad_left) {
                 TleftDrive.setPower(power);
                 BleftDrive.setPower(-power);
                 TrightDrive.setPower(-power);
@@ -145,7 +144,7 @@ public class Mecanum_Mate extends LinearOpMode {
                     power = 0.5;
                 if (gamepad1.left_trigger==0)
                     power=1;
-                if (!gamepad1.dpad_right) {
+                if (!gamepad1.dpad_left) {
                     TleftDrive.setPower(0);
                     BleftDrive.setPower(0);
                     TrightDrive.setPower(0);
@@ -155,16 +154,16 @@ public class Mecanum_Mate extends LinearOpMode {
                 }
             }
 
-            while (gamepad1.dpad_left) {
+            while (gamepad1.dpad_right) {
                 TleftDrive.setPower(-power);
                 BleftDrive.setPower(power);
                 TrightDrive.setPower(power);
                 BrightDrive.setPower(-power);
                 if (gamepad1.left_trigger!=0)
-                    power = 0.5;
+                    power = 0.3;
                 if (gamepad1.left_trigger==0)
                     power=1;
-                if (!gamepad1.dpad_left) {
+                if (!gamepad1.dpad_right) {
                     TleftDrive.setPower(0);
                     BleftDrive.setPower(0);
                     TrightDrive.setPower(0);
@@ -237,7 +236,17 @@ public class Mecanum_Mate extends LinearOpMode {
                 }
             }
 
-
+            if (gamepad1.back) {
+                ServoRight.setPosition(0.7);
+                ServoLeft.setPosition(0);
+            }
+            if (gamepad1.start){
+                ServoRight.setPosition(0);
+                ServoLeft.setPosition(0.7);
+            }
+            telemetry.addData("pozitie", ServoRight.getPosition());
+            telemetry.addData("pozitie", ServoLeft.getPosition());
+            telemetry.update();
             }
 
         }
