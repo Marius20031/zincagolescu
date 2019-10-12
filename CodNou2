@@ -145,6 +145,29 @@ public class CodNou extends LinearOpMode {
             idle();
             //se verifica daca motoarele si-au indeplinit numarul de pulsatii
        }
+       
+       MotorSF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MotorSJ.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MotorDF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MotorDJ.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        MotorSF.setPower(-0.3);
+        MotorSJ.setPower(0.3);
+        MotorDF.setPower(-0.3);
+        MotorDJ.setPower(0.3);
+        sleep(420);
+       
+        if (!MotorSF.isBusy() && !MotorDJ.isBusy() && !MotorDF.isBusy() && !MotorSJ.isBusy()) {
+            MotorSF.setPower(0);
+            MotorSJ.setPower(0);
+            MotorDF.setPower(0);
+            MotorDJ.setPower(0);
+        }
+       MotorSF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorSJ.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorDF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorDJ.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        
         //am setat puterea
         MotorSF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorSJ.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
