@@ -64,6 +64,10 @@ public class CodNou extends LinearOpMode {
         //sensorColor2 = hardwareMap.get(ColorSensor.class, "Lsensor_color2");
         //senzorul de culoare
 
+        MotorSF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorSJ.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorDF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorDJ.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         MotorSF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
