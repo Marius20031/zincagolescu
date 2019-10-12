@@ -1,0 +1,84 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gyroscope;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+@Autonomous(name = "AutonomTiti", group = "LinearOpMode")
+public class AutonomTiti extends LinearOpMode {
+
+    private DcMotor MotorStanga;
+    private DcMotor MotorDreapta;
+    private DcMotor Motor3;
+    private DcMotor Brat;
+    private Servo ServoDreapta;
+    private Servo ServoStanga;
+    private Gyroscope imu;
+    private DistanceSensor sensorRange;
+
+    @Override
+    public void runOpMode(){
+       MotorStanga = hardwareMap.dcMotor.get("MotorStanga");
+       MotorDreapta = hardwareMap.dcMotor.get("MotorDreapta");
+       Motor3 = hardwareMap.dcMotor.get("Motor3");
+       Brat = hardwareMap.dcMotor.get("Brat");
+       ServoDreapta = hardwareMap.servo.get("ServoDreapta");
+       ServoStanga = hardwareMap.servo.get("ServoStanga");
+       sensorRange = hardwareMap.get(DistanceSensor.class, "SenzorDistanta");
+       Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
+
+
+        telemetry.addData(">>", "Press start to continue");
+        telemetry.update();
+
+
+        waitForStart();
+        if (opModeIsActive()) {
+            while (opModeIsActive()) {
+
+                MotorStanga.setPower(0.5);
+                MotorDreapta.setPower(-1);
+                telemetry.addData("deviceName",sensorRange.getDeviceName() );
+                telemetry.addData("range", String.format("%.01f mm", sensorRange.getDistance(DistanceUnit.MM)));
+                telemetry.addData("range", String.format("%.01f cm", sensorRange.getDistance(DistanceUnit.CM)));
+                telemetry.addData("range", String.format("%.01f m", sensorRange.getDistance(DistanceUnit.METER)));
+                telemetry.addData("range", String.format("%.01f in", sensorRange.getDistance(DistanceUnit.INCH)));
+                telemetry.update();
+
+                Rev2mDistanceSensor specificmethods;
+                if (sensorRange.getDistance(DistanceUnit.CM)<15){
+                    idle();
+                    colecteaza();
+                }
+
+
+            }
+        }
+    }
+
+    public void fadreapta (){
+        MotorStanga.setPower(1);
+        MotorDreapta.setPower(-1);
+        sleep(1000);
+        MotorDreapta.setPower(1);
+        MotorStanga.setPower(-1);
+        Motor3.setPower(1);
+        sleep(10000);
+    }
+
+    public void colecteaza(){
+        ServoStanga.setPosition(0);
+        ServoDreapta.setPosition(0.7);
+    }
+
+    /*public void stop1(){
+        MotorStanga.setPower(0);
+        MotorDreapta.setPower(0);
+    }*/
+}
