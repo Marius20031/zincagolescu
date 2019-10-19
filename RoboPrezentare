@@ -32,7 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
@@ -45,23 +44,21 @@ public class RoboPrezentare extends LinearOpMode {
     private DcMotor rightDrive;
     private DcMotor spinDrive;
     private DcMotor Brat;
-    private Servo  ServoDreapta;
-    private Servo  ServoStanga;
-    private DistanceSensor SenzorRange;
+    private Servo ServoDreapta;
+    private Servo ServoStanga;
+
 
     @Override
     public void runOpMode() {
         double miscare;
         double variabila;
-        double spin;
+        double spin=1;
         leftDrive = hardwareMap.dcMotor.get("MotorStanga");
         rightDrive = hardwareMap.dcMotor.get("MotorDreapta");
         spinDrive = hardwareMap.dcMotor.get("Motor3");
         Brat = hardwareMap.dcMotor.get("Brat");
         ServoDreapta = hardwareMap.servo.get("ServoDreapta");
         ServoStanga = hardwareMap.servo.get("ServoStanga");
-        SenzorRange = hardwareMap.get(DistanceSensor.class, "SenzorDistanta");
-
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -69,11 +66,38 @@ public class RoboPrezentare extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                variabila = gamepad1.left_stick_y;
-                leftDrive.setPower(-variabila);
-                rightDrive.setPower(variabila);
-                spin = gamepad1.left_stick_x;
-                spinDrive.setPower(spin);
+                while (gamepad1.dpad_up){
+                    leftDrive.setPower(-1);
+                    rightDrive.setPower(1);
+                    if (!(gamepad1.dpad_up)){
+                        leftDrive.setPower(0);
+                        rightDrive.setPower(0);
+                        break;
+                    }
+                }
+                while (gamepad1.dpad_down){
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(-1);
+                    if (!(gamepad1.dpad_up)){
+                        leftDrive.setPower(0);
+                        rightDrive.setPower(0);
+                        break;
+                    }
+                }
+                while (gamepad1.dpad_right){
+                    spinDrive.setPower(spin);
+                    if (!gamepad1.dpad_right){
+                        spinDrive.setPower(0);
+                        break;
+                    }
+                }
+                while (gamepad1.dpad_left){
+                    spinDrive.setPower(-spin);
+                    if (!gamepad1.dpad_left){
+                        spinDrive.setPower(0);
+                        break;
+                    }
+                }
                 miscare = gamepad1.right_stick_y;
                 Brat.setPower(miscare);
                 telemetry.addData("Target Power", miscare);
