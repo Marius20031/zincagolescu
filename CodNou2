@@ -33,7 +33,7 @@ public class CodNou extends LinearOpMode {
     int pozitiemotor2 = 0;
     int inapoi = 0;
     double power = 1;
-
+    int target;
 
     @Override
     public void runOpMode() {
@@ -102,7 +102,10 @@ public class CodNou extends LinearOpMode {
 
         telemetry.addData("Mode", "running");
         telemetry.update();
-        DiagonalaSJos();
+
+        power=0.5;
+        target=3155;
+        DiagonalaSJos(power,target);
 
        if (!MotorSF.isBusy() && !MotorDJ.isBusy()) {
            MotorSF.setPower(0);
@@ -382,18 +385,19 @@ public class CodNou extends LinearOpMode {
         }
         */
     }
-    public void DiagonalaSJos(){
+    public void DiagonalaSJos(double p,int t){
+
         MotorSF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorDJ.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         MotorSF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorDJ.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        MotorSF.setTargetPosition(-3155);
-        MotorDJ.setTargetPosition(3155);
+        MotorSF.setTargetPosition(-t);
+        MotorDJ.setTargetPosition(t);
 
-        MotorSF.setPower(-0.5);
-        MotorDJ.setPower(0.5);
+        MotorSF.setPower(-p);
+        MotorDJ.setPower(p);
     }
 
     public void colectareSkyStone() {
