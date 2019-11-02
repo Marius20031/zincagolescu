@@ -13,7 +13,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+import java.util.Locale;
 
 @Autonomous (name= "CodNouAlbastru1")
 public class CodNouAlbastru extends LinearOpMode {
@@ -23,8 +26,8 @@ public class CodNouAlbastru extends LinearOpMode {
     public DcMotor MotorSF = null;
     public DcMotor MotorDJ = null;
     public DcMotor MotorSJ = null;
-    //ColorSensor sensorColor;
-    //ColorSensor sensorColor2;
+    ColorSensor sensorColor;
+    ColorSensor sensorColor2;
     public Servo Servomotor1 = null;
     public Servo Servomotor2 = null;
     int[] Skystones = new int[6];
@@ -35,7 +38,12 @@ public class CodNouAlbastru extends LinearOpMode {
     int pozitiemotor = 0;
     int pozitiemotor2 = 0;
     int inapoi = 0;
-
+    int Piatra1 =0;
+    int Piatra2 =0;
+    int Piatra3 =0;
+    int Piatra4 =0;
+    int Piatra5 =0;
+    int Piatra6 =0;
 
     @Override
     public void runOpMode() {
@@ -59,8 +67,8 @@ public class CodNouAlbastru extends LinearOpMode {
         Servomotor2 = hardwareMap.servo.get("Servo2");
         //servomotorul
 
-        //sensorColor = hardwareMap.get(ColorSensor.class, "Rsensor_color");
-        //sensorColor2 = hardwareMap.get(ColorSensor.class, "Lsensor_color2");
+        sensorColor = hardwareMap.get(ColorSensor.class, "Rsensor_color");
+        sensorColor2 = hardwareMap.get(ColorSensor.class, "Lsensor_color");
         //senzorul de culoare
 
         MotorDF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -77,6 +85,7 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorDJ.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //se reseteaza valorile encoderelor pentru cele doua motoare de stanga la 0
+        sensorColor.enableLed(true);
 
         //motoarele de stanga isis iau ca referinta pozitia initiala
 
@@ -89,6 +98,8 @@ public class CodNouAlbastru extends LinearOpMode {
         aceste valori percepute in RGB se vor inmulgii cu o constanta=255
         astefl vectorul va contive valori hsv
         */
+
+
 
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
@@ -122,7 +133,7 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDJ.setPower(0);
         sleep(500);
 
-        ApropierStanga(0.3,500);
+        ApropierStanga(0.3,280);
         while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Heading: ", angles.firstAngle);
@@ -136,7 +147,54 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDJ.setPower(0);
         sleep(500);
 
-        Inainte(0.3,1550);
+        Servomotor1.setPosition(0);
+        Servomotor2.setPosition(0);
+        Color.RGBToHSV((int) (sensorColor2.red() * SCALE_FACTOR),
+                (int) (sensorColor2.green() * SCALE_FACTOR),
+                (int) (sensorColor2.blue() * SCALE_FACTOR),
+                hsvValues);
+
+        /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                (int) (sensorColor.green() * SCALE_FACTOR),
+                (int) (sensorColor.blue() * SCALE_FACTOR),
+                hsvValues);
+            */
+        telemetry.addData("Alpha", sensorColor2.alpha());
+        telemetry.addData("Red  ", sensorColor2.red());
+        telemetry.addData("Green", sensorColor2.green());
+        telemetry.addData("Blue ", sensorColor2.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+
+        telemetry.addData("Alpha", sensorColor.alpha());
+        telemetry.addData("Red  ", sensorColor.red());
+        telemetry.addData("Green", sensorColor.green());
+        telemetry.addData("Blue ", sensorColor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+
+        if (sensorColor2.red()<150 || sensorColor2.green()<150){
+           Servomotor1.setPosition(-1);
+            sleep(500);
+        }
+       /* if (sensorColor.red()<150 && sensorColor.green()<150){
+            Servomotor2.setPosition(1);
+            sleep(500);
+        }*/
+        telemetry.update();
+
+        telemetry.addData("Alpha2", sensorColor2.alpha());
+        telemetry.addData("Red2  ", sensorColor2.red());
+        telemetry.addData("Green2", sensorColor2.green());
+        telemetry.addData("Blue2 ", sensorColor2.blue());
+        telemetry.addData("Hue2", hsvValues[0]);
+
+        telemetry.addData("Alpha", sensorColor.alpha());
+        telemetry.addData("Red  ", sensorColor.red());
+        telemetry.addData("Green", sensorColor.green());
+        telemetry.addData("Blue ", sensorColor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+
+        telemetry.update();
+     /*   Inainte(0.3,1550);
         while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Heading: ", angles.firstAngle);
