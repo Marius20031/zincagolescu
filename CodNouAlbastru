@@ -119,7 +119,7 @@ public class CodNouAlbastru extends LinearOpMode {
         waitForStart();
         telemetry.addData("Mode", "running");
         telemetry.update();
-        DiagonalaSV(0.5,3155);
+        DiagonalaSV(0.5,3055);
         while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Heading: ", angles.firstAngle);
@@ -133,7 +133,7 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDJ.setPower(0);
         sleep(500);
 
-        ApropierStanga(0.3,280);
+        ApropierEst(0.2,335);
         while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Heading: ", angles.firstAngle);
@@ -147,8 +147,7 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDJ.setPower(0);
         sleep(500);
 
-        Servomotor1.setPosition(0);
-        Servomotor2.setPosition(0);
+
         Color.RGBToHSV((int) (sensorColor2.red() * SCALE_FACTOR),
                 (int) (sensorColor2.green() * SCALE_FACTOR),
                 (int) (sensorColor2.blue() * SCALE_FACTOR),
@@ -159,11 +158,11 @@ public class CodNouAlbastru extends LinearOpMode {
                 (int) (sensorColor.blue() * SCALE_FACTOR),
                 hsvValues);
             */
-        telemetry.addData("Alpha", sensorColor2.alpha());
-        telemetry.addData("Red  ", sensorColor2.red());
-        telemetry.addData("Green", sensorColor2.green());
-        telemetry.addData("Blue ", sensorColor2.blue());
-        telemetry.addData("Hue", hsvValues[0]);
+        telemetry.addData("Alpha2", sensorColor2.alpha());
+        telemetry.addData("Red2  ", sensorColor2.red());
+        telemetry.addData("Green2", sensorColor2.green());
+        telemetry.addData("Blue2 ", sensorColor2.blue());
+        telemetry.addData("Hue2", hsvValues[0]);
 
         telemetry.addData("Alpha", sensorColor.alpha());
         telemetry.addData("Red  ", sensorColor.red());
@@ -171,14 +170,57 @@ public class CodNouAlbastru extends LinearOpMode {
         telemetry.addData("Blue ", sensorColor.blue());
         telemetry.addData("Hue", hsvValues[0]);
 
-        if (sensorColor2.red()<150 || sensorColor2.green()<150){
-           Servomotor1.setPosition(-1);
+        telemetry.addData("Servo",Servomotor1.getPosition());
+
+        if (sensorColor2.red()<125 && sensorColor2.green()<125){
+            telemetry.addData("Alpha2", sensorColor2.alpha());
+            telemetry.addData("Red2  ", sensorColor2.red());
+            telemetry.addData("Green2", sensorColor2.green());
+            telemetry.addData("Blue2 ", sensorColor2.blue());
+            telemetry.addData("Hue2", hsvValues[0]);
+            telemetry.update();
+            Servomotor2.setPosition(0.5);
+            sleep(750);
+            ApropierVest(0.3,400);
+            while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                telemetry.addData("Heading: ", angles.firstAngle);
+                telemetry.addData("Roll: ", angles.secondAngle);
+                telemetry.addData("Pitch", angles.thirdAngle);
+                telemetry.update();
+            }
+            MotorSF.setPower(0);
+            MotorSJ.setPower(0);
+            MotorDF.setPower(0);
+            MotorDJ.setPower(0);
             sleep(500);
+            telemetry.addData("Alpha2", sensorColor2.alpha());
+            telemetry.addData("Red2  ", sensorColor2.red());
+            telemetry.addData("Green2", sensorColor2.green());
+            telemetry.addData("Blue2 ", sensorColor2.blue());
+            telemetry.addData("Hue2", hsvValues[0]);
+            telemetry.update();
+            InainteN(0.5,4550);
+            while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                telemetry.addData("Heading: ", angles.firstAngle);
+                telemetry.addData("Roll: ", angles.secondAngle);
+                telemetry.addData("Pitch", angles.thirdAngle);
+                telemetry.update();
+            }
+            MotorSF.setPower(0);
+            MotorSJ.setPower(0);
+            MotorDF.setPower(0);
+            MotorDJ.setPower(0);
+            sleep(500);
+            telemetry.addData("Alpha2", sensorColor2.alpha());
+            telemetry.addData("Red2  ", sensorColor2.red());
+            telemetry.addData("Green2", sensorColor2.green());
+            telemetry.addData("Blue2 ", sensorColor2.blue());
+            telemetry.addData("Hue2", hsvValues[0]);
+            telemetry.update();
+            Servomotor2.setPosition(-1);
         }
-       /* if (sensorColor.red()<150 && sensorColor.green()<150){
-            Servomotor2.setPosition(1);
-            sleep(500);
-        }*/
         telemetry.update();
 
         telemetry.addData("Alpha2", sensorColor2.alpha());
@@ -193,8 +235,10 @@ public class CodNouAlbastru extends LinearOpMode {
         telemetry.addData("Blue ", sensorColor.blue());
         telemetry.addData("Hue", hsvValues[0]);
 
+        telemetry.addData("Servo",Servomotor1.getPosition());
         telemetry.update();
-     /*   Inainte(0.3,1550);
+
+        InainteN(0.3,841);
         while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Heading: ", angles.firstAngle);
@@ -207,7 +251,8 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDF.setPower(0);
         MotorDJ.setPower(0);
         sleep(500);
-        Inainte(0.3,1550);
+
+     /*   InainteN(0.3,1550);
         while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Heading: ", angles.firstAngle);
@@ -220,7 +265,20 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDF.setPower(0);
         MotorDJ.setPower(0);
         sleep(500);
-        Inainte(0.3,1550);
+        InainteN(0.3,1550);
+        while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            telemetry.addData("Heading: ", angles.firstAngle);
+            telemetry.addData("Roll: ", angles.secondAngle);
+            telemetry.addData("Pitch", angles.thirdAngle);
+            telemetry.update();
+        }
+        MotorSF.setPower(0);
+        MotorSJ.setPower(0);
+        MotorDF.setPower(0);
+        MotorDJ.setPower(0);
+        sleep(500);
+        InainteN(0.3,1550);
         while (opModeIsActive() && !isStopRequested() && MotorSF.isBusy() && MotorSJ.isBusy() && MotorDF.isBusy() && MotorDJ.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Heading: ", angles.firstAngle);
@@ -455,7 +513,7 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorSF.setPower(p);
         MotorDJ.setPower(p);
     }
-    public void Inainte(double p,int t){
+    public void InainteN(double p,int t){
 
         MotorSF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorSJ.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -478,7 +536,7 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDJ.setPower(p);
     }
 
-    public void ApropierStanga(double p,int t){
+    public void ApropierEst(double p,int t){
         MotorSF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorSJ.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorDF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -499,9 +557,30 @@ public class CodNouAlbastru extends LinearOpMode {
         MotorDF.setPower(p);
         MotorDJ.setPower(p);
     }
+    public void ApropierVest(double p,int t) {
+        MotorSF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorSJ.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorDF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorDJ.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        MotorSF.setTargetPosition(t);
+        MotorSJ.setTargetPosition(-t);
+        MotorDF.setTargetPosition(-t);
+        MotorDJ.setTargetPosition(t);
+
+        MotorSF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorSJ.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorDF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorDJ.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        MotorSF.setPower(p);
+        MotorSJ.setPower(p);
+        MotorDF.setPower(p);
+        MotorDJ.setPower(p);
+    }
 
 
-    public void colectareSkyStone() {
+        public void colectareSkyStone() {
         MotorSF.setPower(0.0);
         MotorSJ.setPower(0.0);
         MotorDF.setPower(0.0);
